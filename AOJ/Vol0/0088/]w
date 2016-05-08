@@ -1,0 +1,85 @@
+#include <cstdio>
+#include <cstring>
+#define MAX_LEN 100
+#define MAX_CODE 8
+using namespace std;
+
+static char str[MAX_LEN + 1];
+static char temp[MAX_LEN * MAX_CODE + 1];
+
+int main(){
+  while(true){
+    if(gets(str) == NULL){
+      return 0;
+    }
+    int len = strlen(str);
+    temp[0] = '\0';
+    for(int i = 0; i < len; i++){
+      char ch = str[i];
+      switch(ch){
+        case ' ' : strcat(temp, "101"); break;
+        case '`' : strcat(temp, "000000"); break;
+        case '\'' : strcat(temp, "000011"); break;
+        case '-' : strcat(temp, "10010001"); break;
+        case '.' : strcat(temp, "010001"); break;
+        case '?' : strcat(temp, "000001"); break;
+        case 'A' : strcat(temp, "100101"); break;
+        case 'B' : strcat(temp, "10011010"); break;
+        case 'C' : strcat(temp, "0101"); break;
+        case 'D' : strcat(temp, "0001"); break;
+        case 'E' : strcat(temp, "110"); break;
+        case 'F' : strcat(temp, "01001"); break;
+        case 'G' : strcat(temp, "10011011"); break;
+        case 'H' : strcat(temp, "010000"); break;
+        case 'I' : strcat(temp, "0111"); break;
+        case 'J' : strcat(temp, "10011000"); break;
+        case 'K' : strcat(temp, "0110"); break;
+        case 'L' : strcat(temp, "00100"); break;
+        case 'M' : strcat(temp, "10011001"); break;
+        case 'N' : strcat(temp, "10011110"); break;
+        case 'O' : strcat(temp, "00101"); break;
+        case 'P' : strcat(temp, "111"); break;
+        case 'Q' : strcat(temp, "10011111"); break;
+        case 'R' : strcat(temp, "1000"); break;
+        case 'S' : strcat(temp, "00110"); break;
+        case 'T' : strcat(temp, "00111"); break;
+        case 'U' : strcat(temp, "10011100"); break;
+        case 'V' : strcat(temp, "10011101"); break;
+        case 'W' : strcat(temp, "000010"); break;
+        case 'X' : strcat(temp, "10010010"); break;
+        case 'Y' : strcat(temp, "10010011"); break;
+        case 'Z' : strcat(temp, "10010000"); break;
+      }
+    }
+    printf("temp:%s ", temp);
+    len = strlen(temp);
+    int sum = 0;
+    int diff = len % 5;
+    for(int i = 0; i < len + diff; i++){
+      if(i < len){
+        sum = sum * 2 + (temp[i] == '1' ? 1 : 0);
+      }
+      else{
+        sum = sum * 2;
+      }
+      if((i + 1) % 5 == 0){
+        if(sum >= 26){
+          switch(sum){
+            case 26 : putchar(' '); break;
+            case 27 : putchar('.'); break;
+            case 28 : putchar(','); break;
+            case 29 : putchar('-'); break;
+            case 30 :putchar('\''); break;
+            case 31 : puthcar('?'); break;
+          }
+        }
+        else{
+          printf("%c", (char)(sum + 'A'));
+        }
+        sum = 0;
+      }
+    }
+    putchar('\n');
+  }
+  return 0;
+}
