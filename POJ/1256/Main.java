@@ -1,117 +1,109 @@
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.List;
+import java.util.LinkedList;
 
 public class Main {
-  static int n;
-  static int[] used;
-  static int[] perm;
-  static Set< String > set;
+  static int N;
+  static char[] perm; // 順列に対応する文字列
+  static boolean[] used;  // その番号を使用したかどうか。順列生成のために使用。
+  static char[] maxStr; // 今までの最大の文字列
+  static Comparator< Character > cp;
 
   public static void main(String[] args){
     Scanner sc = new Scanner(System.in);
+    cp = new Comparator< Character >(){
+      @Override
+        public int compare(Character c1, Character c2){
+          char ch1 = c1.charValue(), ch2 = c2.charValue();
+          return compareChar(ch1, ch2);
+        }
+    };
 
-    n = sc.nextInt();
+    N = sc.nextInt();
+    used = new boolean[12];
     sc.nextLine();
-
-    perm = new int[13];
-    used = new int[13];
-    set = new TreeSet< String >(
-        new Comparator< String >(){
-        @Override
-        public int compare(String s1, String s2){
-        char[] cc1 = s1.toCharArray(), cc2 = s2.toCharArray();
-        for(int i = 0; i < cc1.length; i++){
-        char c1 = cc1[i], c2 = cc2[i];
-        if(('a' <= c1 && c1 <= 'z') &&
-          ('a' <= c2 && c2 <= 'z')){
-        if(c1 < c2){
-        return -1;
-        }
-        else if(c1 > c2){
-        return 1;
-        }
-        }
-        else if(('A' <= c1 && c1 <= 'Z') &&
-          ('A' <= c2 && c2 <= 'Z')){
-        if(c1 < c2){
-        return -1;
-        }
-        else if(c1 > c2){
-          return 1;
-        }
-        }
-        else if(('a' <= c1 && c1 <= 'z') &&
-            ('A' <= c2 && c2 <= 'Z')){
-          c2 = (char)('a' + c2 - 'A');
-          if(c1 < c2){
-            return -1;
-          }
-          else if(c1 > c2){
-            return 1;
-          }
-          else{
-            return 1;
-          }
-        }
-        else{
-          c1 = (char)('a' + c1 - 'A');
-          if(c1 < c2){
-            return -1;
-          }
-          else if(c1 > c2){
-            return 1;
-          }
-          else{
-            return -1;
-          }
-        }
-        }
-        return 0;
-        };
-        }
-
-    );
-    for(int i = 0; i < n; i++){
-      String str = sc.nextLine();
-      Character[] chs = str.toCharArray();
-      for(int j = 0; j < str.length(); j++){
-        if(used[j] == -1){
-          continue;
-        }
-        for(int k = j + 1; k < str.length(); k++){
-          if(j != k && str.charAt(j) == str.charAt(k)){
-            ++used[j]; used[k] = -1;
-          }
-        }
+    for(int i = 0; i < N; i++){
+      String s = sc.nextLine();
+      // 入力文字列をCharacter[]に変換
+      Character[] stro = new Character[s.length()];
+      for(int j = 0; j < stro.length; j++){
+        stro[j] = s.charAt(j);
       }
-      search(str.toCharArray(), 0, str.length());
-      for(String s : set){
-        System.out.println(s);
+      // Character[]をソート
+      Arrays.sort(stro, cp);
+      // Character[]からchar[]へ変換
+      char[] str = new char[stro.length];
+      for(int j = 0; j < str.length; j++){
+        str[j] = stro[j];
       }
-      set.clear();
+
+      maxStr = new char[str.length];
+      perm = new char[str.length];
+      maxStr[0] = '\0';
+
+      search(str, 0);
     }
   }
 
-  private static void search(char[] str, int i, int len){
-    if(i == len){
-      char[] tmp = new char[len];
-      for(int j = 0; j < len; j++){
-        tmp[j] = str[perm[j]];
-      }
-      set.add(new String(tmp));
+  private static void search(char[] str, int i){
+    // 枝刈り
+    if(compareChars(perm, maxStr, i) <= 0){
       return;
     }
-    for(int j = 0; j < len; j++){
-      if(used[j] >= 0){
-        --used[j];
-        perm[i] = j;
-        search(str, i + 1, len);
-        ++used[j];
+
+    // 底
+    if(i == str.length){
+      System.out.println(perm);
+      for(int j = 0; j < str.length; j++){
+        maxStr[j] = perm[j];
+      }
+      return;
+    }
+
+    for(int j = 0; j < str.length; j++){
+      if(!used[j]){
+        perm[i] = str[j];
+        used[j] = true;
+        search(str, i + 1);
+        used[j] = false;
       }
     }
   }
-}
 
+  private static int compareChar(char ch1, char ch2){
+    char chl1 = Character.toLowerCase(ch1), chl2 = Character.toLowerCase(ch2);
+    if(chl1 < chl2){
+      return -1;
+    }
+    else if(chl1 > chl2){
+      return 1;
+    }
+    else if(ch1 < ch2){
+      return -1;
+    }
+    else if(ch1 > ch2){
+      return 1;
+    }
+    else{
+      return 0;
+    }
+  }
+
+  private static int compareChars(char[] cc1, char[] cc2, int len){
+    if(len <= 0){
+      return 1;
+    }
+    for(int i = 0; i < len; i++){
+      int tmp = compareChar(cc1[i], cc2[i]);
+      if(tmp > 0){
+        return 1;
+      }
+      else if(tmp < 0){
+        return -1;
+      }
+    }
+    return 0;
+  }
+}
