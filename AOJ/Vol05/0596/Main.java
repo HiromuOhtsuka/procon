@@ -1,6 +1,5 @@
 import java.util.Scanner;
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class Main {
   static int N, K;
@@ -10,7 +9,8 @@ public class Main {
 
   static final int INF = Integer.MAX_VALUE / 2;
   static int[] costs;
-  static Queue< Integer > que;
+  static PriorityQueue< Point > pq;
+  static boolean end;
 
   public static void main(String[] args){
     Scanner sc = new Scanner(System.in);
@@ -33,14 +33,11 @@ public class Main {
       costs[i] = INF;
     }
 
-    que = new LinkedList< Integer >();
-    que.offer(0);
+    pq = new PriorityQueue< Point >();
     costs[0] = 0;
-    while(!que.isEmpty()){
-      int v = que.poll();
-      if(v == N - 1){
-        continue;
-      }
+    pq.offer(new Point(costs[0], 0));
+    while(!pq.isEmpty() && !end){
+      int v = pq.poll().v;
       dfs(v, 0, R[v], costs[v] + C[v], -1);
     }
 
@@ -48,20 +45,35 @@ public class Main {
   }
 
   private static void dfs(int s, int d, int l, int c, int p){
-    if(costs[s] > c){
-      costs[s] = c;
-      if(!que.contains(s)){
-        que.offer(s);
-      }
-    }
     if(d == l){
       return;
     }
     for(int i = 0; i < sp[s]; i++){
       int nv = G[s][i];
       if(nv != p){
+        if(costs[nv] > c){
+          costs[nv] = c;
+          pq.offer(new Point(costs[nv] + C[nv], nv));
+        }
+        if(nv == N - 1){
+          end = true;
+          return;
+        }
         dfs(nv, d + 1, l, c, s);
       }
+    }
+  }
+
+  static class Point implements Comparable< Point > {
+    int c, v;
+
+    Point(int c, int v){
+      this.c = c; this.v = v;
+    }
+
+    @Override
+    public int compareTo(Point p){
+      return c - p.c;
     }
   }
 }
