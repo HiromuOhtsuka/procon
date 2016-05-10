@@ -43,6 +43,7 @@ public class Main {
 
       lineX = new int[k + 2]; spx = 0;
       int count = 0, lastX = -1;
+      boolean conseq = false;
       lineX[spx++] = minX;
       for(int x = minX; x <= maxX; x++){
         for(int i = 0; i < k; i++){
@@ -54,17 +55,28 @@ public class Main {
           }
         }
         if(count == 0){
-          lastX = Math.max(lastX, x);
+          if(conseq){
+            lastX = Math.max(lastX, x);
+            lineX[spx++] = lastX;
+            lastX = -1;
+            conseq = false;
+          }
+          else{
+            conseq = true;
+            lastX = Math.max(lastX, x);
+          }
         }
         else if(lastX != -1){
           lineX[spx++] = lastX;
           lastX = -1;
+          conseq = false;
         }
       }
-      lineX[spx++] = maxX;
+      lineX[spx++] = maxX + 1;
 
       lineY = new int[k + 2]; spy = 0;  count = 0;
       int lastY = -1;
+      conseq = false;
       lineY[spy++] = minY;
       for(int y = minY; y <= maxY; y++){
         for(int i = 0; i < k; i++){
@@ -76,14 +88,24 @@ public class Main {
           }
         }
         if(count == 0){
-          lastY = Math.max(lastY, y);
+          if(conseq){
+            lastY = Math.max(lastY, y);
+            lineY[spy++] = lastY;
+            lastY = -1;
+            conseq = false;
+          }
+          else{
+            conseq = true;
+            lastY = Math.max(lastY, y);
+          }
         }
         else if(lastY != -1){
           lineY[spy++] = lastY;
           lastY = -1;
+          conseq = false;
         }
       }
-      lineY[spy++] = maxY;
+      lineY[spy++] = maxY + 1;
 
       int[][] counts = new int[spy - 1][spx - 1];
       for(int i = 0; i < spy - 1; i++){
@@ -92,9 +114,9 @@ public class Main {
           int left = lineX[j], right = lineX[j + 1];
           for(int l = 0; l < k; l++){
             if(rects[l].left >= left &&
-                rects[l].right <= right &&
+                rects[l].right + 1 <= right &&
                 rects[l].up >= up &&
-                rects[l].down <= down){
+                rects[l].down + 1 <= down){
               ++counts[i][j];
             }
           }
