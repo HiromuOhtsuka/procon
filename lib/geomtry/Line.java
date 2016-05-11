@@ -1,3 +1,25 @@
+class Line {
+  Point s, t;
+
+  Line(Point s, Point t){
+    this.s = s; this.t = t;
+  }
+
+  Point projection(Point p){
+    Point st = new Point(t.x - s.x, t.y - s.y),
+      sp = new Point(p.x - s.x, p.y - s.y);
+    double k = Point.dot(st, sp) / st.norm2();
+    return Point.add(s, Point.mul(k, st));
+  }
+
+  Point reflection(Point p){
+    return Point.add(Point.sub(
+      Point.mul(2.0, 
+        Point.sub(projection(p), s)),
+          new Point(p.x - s.x, p.y - s.y)), s);
+  }
+}
+
 class Point implements Comparable< Point > {
   static final double EPS = 1e-10;
   double x, y;
