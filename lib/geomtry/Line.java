@@ -28,20 +28,20 @@ class Point implements Comparable< Point > {
     this.x = x; this.y = y;
   }
 
-  static Point add(Point v1, Point v2){
-    return new Point(v1.x + v2.x, v1.y + v2.y);
+  static Point add(Point p1, Point p2){
+    return new Point(p1.x + p2.x, p1.y + p2.y);
   }
 
-  static Point sub(Point v1, Point v2){
-    return new Point(v1.x - v2.x, v1.y - v2.y);
+  static Point sub(Point p1, Point p2){
+    return new Point(p1.x - p2.x, p1.y - p2.y);
   }
 
-  static Point mul(double k, Point v){
-    return new Point(k * v.x, k * v.y);
+  static Point mul(double k, Point p){
+    return new Point(k * p.x, k * p.y);
   }
 
-  static Point div(Point v, double d){
-    return new Point(v.x / d, v.y / d);
+  static Point div(Point p, double d){
+    return new Point(p.x / d, p.y / d);
   }
 
   static double dot(Point p1, Point p2){
