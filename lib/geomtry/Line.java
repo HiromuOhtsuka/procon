@@ -5,6 +5,9 @@ class Line {
     this.s = s; this.t = t;
   }
 
+  /*
+   * find a projection for the line st.
+  */
   Point projection(Point p){
     Point st = new Point(t.x - s.x, t.y - s.y),
       sp = new Point(p.x - s.x, p.y - s.y);
@@ -12,6 +15,9 @@ class Line {
     return Point.add(s, Point.mul(k, st));
   }
 
+  /*
+   * find a reflection for the line st.
+  */
   Point reflection(Point p){
     return Point.add(Point.sub(
       Point.mul(2.0, 
