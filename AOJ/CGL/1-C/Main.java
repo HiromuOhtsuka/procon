@@ -1,28 +1,38 @@
-class Line {
-  Point s, t;
+import java.util.Scanner;
 
-  Line(Point s, Point t){
-    this.s = s; this.t = t;
-  }
+public class Main {
+  static int q;
+  static Point p0, p1, p2;
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
 
-  /*
-   * find a projection for the line st.
-  */
-  Point projection(Point p){
-    Point st = new Point(t.x - s.x, t.y - s.y),
-      sp = new Point(p.x - s.x, p.y - s.y);
-    double k = Point.dot(st, sp) / st.norm2();
-    return Point.add(s, Point.mul(k, st));
-  }
+    double x0 = sc.nextDouble(), y0 = sc.nextDouble(),
+      x1 = sc.nextDouble(), y1 = sc.nextDouble();
+    p0 = new Point(x0, y0); p1 = new Point(x1, y1);
 
-  /*
-   * find a reflection for the line st.
-  */
-  Point reflection(Point p){
-    return Point.add(Point.sub(
-      Point.mul(2.0, 
-        Point.sub(projection(p), s)),
-          new Point(p.x - s.x, p.y - s.y)), s);
+    q = sc.nextInt();
+    for(int i = 0; i < q; i++){
+      double x = sc.nextDouble(), y = sc.nextDouble();
+      p2 = new Point(x, y);
+      Point.Position val = Point.ccw(p0, p1, p2);
+      switch(val){
+        case COUNTER_CLOCKWISE : 
+          System.out.println("COUNTER_CLOCKWISE");
+          break;
+        case CLOCKWISE : 
+          System.out.println("CLOCKWISE");
+          break;
+        case ONLINE_BACK : 
+          System.out.println("ONLINE_BACK");
+          break;
+        case ONLINE_FRONT :
+          System.out.println("ONLINE_FRONT");
+          break;
+        case ON_SEGMENT :
+          System.out.println("ON_SEGMENT");
+          break;
+      }
+    }
   }
 }
 

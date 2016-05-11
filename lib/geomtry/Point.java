@@ -1,5 +1,10 @@
 class Point implements Comparable< Point > {
   static final double EPS = 1e-10;
+  static enum Position {
+    COUNTER_CLOCKWISE, CLOCKWISE, 
+    ONLINE_BACK, ONLINE_FRONT,
+    ON_SEGMENT
+  };
   double x, y;
 
   Point(double x, double y){
@@ -26,6 +31,27 @@ class Point implements Comparable< Point > {
     return p1.x * p2.x + p1.y * p2.y;
   }
 
+  static double cross(Point p1, Point p2){
+    return p1.x * p2.y - p1.y * p2.x;
+  }
+
+  static Position ccw(Point p0, Point p1, Point p2){
+    Point a = sub(p1, p0), b = sub(p2, p0);
+    if(cross(a, b) > EPS){
+      return Position.COUNTER_CLOCKWISE;
+    }
+    if(cross(a, b) < -EPS){
+      return Position.CLOCKWISE;
+    }
+    if(dot(a, b) < -EPS){
+      return Position.ONLINE_BACK;
+    }
+    if(a.norm2() < b.norm2()){
+      return Position.ONLINE_FRONT;
+    }
+    return Position.ON_SEGMENT;
+  }
+
   double norm(){
     return Math.sqrt(x * x + y * y);
   }
@@ -35,36 +61,36 @@ class Point implements Comparable< Point > {
   }
 
   @Override
-  public boolean equals(Object obj){
-    if(!(obj instanceof Point)){
-      return false;
+    public boolean equals(Object obj){
+      if(!(obj instanceof Point)){
+        return false;
+      }
+      Point p = (Point)obj;
+      return Math.abs(x - p.x) < EPS &&
+        Math.abs(y - p.y) < EPS;
     }
-    Point p = (Point)obj;
-    return Math.abs(x - p.x) < EPS &&
-      Math.abs(y - p.y) < EPS;
-  }
 
   @Override
-  public int compareTo(Point p){
-    if(equals(p)){
-      return 0;
-    }
+    public int compareTo(Point p){
+      if(equals(p)){
+        return 0;
+      }
 
-    if(Math.abs(x - p.x) < EPS){ // x == p.x
-      if(y < p.y){
-        return -1;
+      if(Math.abs(x - p.x) < EPS){ // x == p.x
+        if(y < p.y){
+          return -1;
+        }
+        else{
+          return 1;
+        }
       }
       else{
-        return 1;
+        if(x < p.x){
+          return -1;
+        }
+        else{
+          return 1;
+        }
       }
     }
-    else{
-      if(x < p.x){
-        return -1;
-      }
-      else{
-        return 1;
-      }
-    }
-  }
 }
