@@ -1,10 +1,10 @@
-class Point implements Comparable< Point > {
-  static final double EPS = 1e-10;
-  static enum Position {
-    COUNTER_CLOCKWISE, CLOCKWISE, 
-    ONLINE_BACK, ONLINE_FRONT,
-    ON_SEGMENT
-  };
+class Point implements Comparable< Point > { 
+  static final double EPS = 1e-10; 
+  static final int COUNTER_CLOCKWISE = 1;
+  static final int CLOCKWISE = -1;
+  static final int ONLINE_BACK = 2;
+  static final int ONLINE_FRONT = -2;
+  static final int ON_SEGMENT = 0;
   double x, y;
 
   Point(double x, double y){
@@ -35,21 +35,21 @@ class Point implements Comparable< Point > {
     return p1.x * p2.y - p1.y * p2.x;
   }
 
-  static Position ccw(Point p0, Point p1, Point p2){
+  static int ccw(Point p0, Point p1, Point p2){
     Point a = sub(p1, p0), b = sub(p2, p0);
     if(cross(a, b) > EPS){
-      return Position.COUNTER_CLOCKWISE;
+      return COUNTER_CLOCKWISE;
     }
     if(cross(a, b) < -EPS){
-      return Position.CLOCKWISE;
+      return CLOCKWISE;
     }
     if(dot(a, b) < -EPS){
-      return Position.ONLINE_BACK;
+      return ONLINE_BACK;
     }
     if(a.norm2() < b.norm2()){
-      return Position.ONLINE_FRONT;
+      return ONLINE_FRONT;
     }
-    return Position.ON_SEGMENT;
+    return ON_SEGMENT;
   }
 
   double norm(){

@@ -1,28 +1,16 @@
-class Line {
+class Segment {
+  static final double EPS = 1e-10;
   Point s, t;
 
-  Line(Point s, Point t){
+  Segment(Point s, Point t){
     this.s = s; this.t = t;
   }
 
-  /*
-   * find a projection for the line st.
-  */
-  Point projection(Point p){
-    Point st = new Point(t.x - s.x, t.y - s.y),
-      sp = new Point(p.x - s.x, p.y - s.y);
-    double k = Point.dot(st, sp) / st.norm2();
-    return Point.add(s, Point.mul(k, st));
-  }
-
-  /*
-   * find a reflection for the line st.
-  */
-  Point reflection(Point p){
-    return Point.add(Point.sub(
-      Point.mul(2.0, 
-        Point.sub(projection(p), s)),
-          new Point(p.x - s.x, p.y - s.y)), s);
+  boolean intersection(Segment s){
+    return Point.ccw(this.s, this.t, s.s) * 
+      Point.ccw(this.s, this.t, s.t) <= 0 &&
+      Point.ccw(s.s, s.t, this.s) * 
+      Point.ccw(s.s, s.t, this.t) <= 0;
   }
 }
 

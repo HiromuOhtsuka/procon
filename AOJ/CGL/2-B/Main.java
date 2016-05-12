@@ -1,28 +1,43 @@
-class Line {
+import java.util.Scanner;
+
+public class Main {
+  static int q;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    q = sc.nextInt();
+    for(int i = 0; i < q; i++){
+      double x0 = sc.nextDouble(), y0 = sc.nextDouble(),
+        x1 = sc.nextDouble(), y1 = sc.nextDouble(),
+        x2 = sc.nextDouble(), y2 = sc.nextDouble(),
+        x3 = sc.nextDouble(), y3 = sc.nextDouble();
+      Point p0 = new Point(x0, y0), p1 = new Point(x1, y1),
+        p2 = new Point(x2, y2), p3 = new Point(x3, y3);
+      Segment s1 = new Segment(p0, p1), s2 = new Segment(p2, p3);
+      if(s1.intersection(s2)){
+        System.out.println("1");
+      }
+      else{
+        System.out.println("0");
+      }
+    }
+  }
+}
+
+class Segment {
+  static final double EPS = 1e-10;
   Point s, t;
 
-  Line(Point s, Point t){
+  Segment(Point s, Point t){
     this.s = s; this.t = t;
   }
 
-  /*
-   * find a projection for the line st.
-  */
-  Point projection(Point p){
-    Point st = new Point(t.x - s.x, t.y - s.y),
-      sp = new Point(p.x - s.x, p.y - s.y);
-    double k = Point.dot(st, sp) / st.norm2();
-    return Point.add(s, Point.mul(k, st));
-  }
-
-  /*
-   * find a reflection for the line st.
-  */
-  Point reflection(Point p){
-    return Point.add(Point.sub(
-      Point.mul(2.0, 
-        Point.sub(projection(p), s)),
-          new Point(p.x - s.x, p.y - s.y)), s);
+  boolean intersection(Segment s){
+    return Point.ccw(this.s, this.t, s.s) * 
+      Point.ccw(this.s, this.t, s.t) <= 0 &&
+      Point.ccw(s.s, s.t, this.s) * 
+      Point.ccw(s.s, s.t, this.t) <= 0;
   }
 }
 
