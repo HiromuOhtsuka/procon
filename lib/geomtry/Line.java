@@ -63,6 +63,12 @@ class Point implements Comparable< Point > {
     return p1.x * p2.y - p1.y * p2.x;
   }
 
+  static double distance(Point p0, Point p1){
+    double dx = p1.x - p0.x,
+           dy = p1.y - p0.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
   static int ccw(Point p0, Point p1, Point p2){
     Point a = sub(p1, p0), b = sub(p2, p0);
     if(cross(a, b) > EPS){
