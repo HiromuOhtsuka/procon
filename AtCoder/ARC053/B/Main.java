@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+public class Main {
+  static String str;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    str = sc.next();
+    char[] ch = str.toCharArray();
+    int[] count = new int[26];
+    for(int i = 0; i < ch.length; i++){
+      ++count[ch[i] - 'a'];
+    }
+
+    int oddCount = 0, pairCount = 0;
+    for(int i = 0; i < 26; i++){
+      if(count[i] % 2 == 1){
+        ++oddCount;
+      }
+      pairCount += count[i] / 2;
+    }
+
+    if(oddCount == 0){
+      System.out.println(ch.length);
+    }
+    else{
+      System.out.println(pairCount / oddCount * 2 + 1);
+    }
+  }
+}
