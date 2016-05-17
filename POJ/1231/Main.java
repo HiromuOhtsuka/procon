@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Main {
   static int n, k, p;
@@ -11,6 +12,7 @@ public class Main {
   public static void main(String[] args){
     Scanner sc = new Scanner(System.in);
 
+    // input
     n = sc.nextInt();
     for(int t = 0; t < n; t++){
       k = sc.nextInt(); p = sc.nextInt();
@@ -29,6 +31,7 @@ public class Main {
         }
       }
 
+      // find rect
       Rect[] rects = new Rect[k];
       for(int i = 0; i < k; i++){
         Rect rect = new Rect(INF, INF, -1, -1);
@@ -41,72 +44,56 @@ public class Main {
         rects[i] = rect;
       }
 
+      Event[] event = new Event[2 * k];
+      int sp = 0;
+      for(int i = 0; i < k; i++){
+        event[sp++] = new Event(true, rects[i].left);
+        event[sp++] = new Event(false, rects[i].right);
+      }
+      Arrays.sort(event);
+
+      // line x
       lineX = new int[k + 2]; spx = 0;
-      int count = 0, lastX = -1;
-      boolean conseq = false;
+      int count = 0;
       lineX[spx++] = minX;
-      for(int x = minX; x <= maxX; x++){
-        for(int i = 0; i < k; i++){
-          if(x == rects[i].left){
-            ++count;
-          }
-          if(x == rects[i].right){
-            --count;
-          }
+      for(int i = 0; i < sp; i++){
+        if(event[i].opening){
+          ++count;
         }
-        if(count == 0){
-          if(conseq){
-            lastX = Math.max(lastX, x);
-            lineX[spx++] = lastX;
-            lastX = -1;
-            conseq = false;
+        else{
+          --count;
+          if(count == 0){
+            lineX[spx++] = event[i].x;
           }
-          else{
-            conseq = true;
-            lastX = Math.max(lastX, x);
-          }
-        }
-        else if(lastX != -1){
-          lineX[spx++] = lastX;
-          lastX = -1;
-          conseq = false;
         }
       }
       lineX[spx++] = maxX + 1;
 
+      sp = 0;
+      for(int i = 0; i < k; i++){
+        event[sp++] = new Event(true, rects[i].up);
+        event[sp++] = new Event(false, rects[i].down);
+      }
+
+      Arrays.sort(event);
+
+      // line y
       lineY = new int[k + 2]; spy = 0;  count = 0;
-      int lastY = -1;
-      conseq = false;
       lineY[spy++] = minY;
-      for(int y = minY; y <= maxY; y++){
-        for(int i = 0; i < k; i++){
-          if(y == rects[i].up){
-            ++count;
-          }
-          if(y == rects[i].down){
-            --count;
-          }
+      for(int i = 0; i < sp; i++){
+        if(event[i].opening){
+          ++count;
         }
-        if(count == 0){
-          if(conseq){
-            lastY = Math.max(lastY, y);
-            lineY[spy++] = lastY;
-            lastY = -1;
-            conseq = false;
+        else{
+          --count;
+          if(count == 0){
+            lineY[spy++] = event[i].x;
           }
-          else{
-            conseq = true;
-            lastY = Math.max(lastY, y);
-          }
-        }
-        else if(lastY != -1){
-          lineY[spy++] = lastY;
-          lastY = -1;
-          conseq = false;
         }
       }
       lineY[spy++] = maxY + 1;
 
+      // count
       int[][] counts = new int[spy - 1][spx - 1];
       for(int i = 0; i < spy - 1; i++){
         int up = lineY[i], down = lineY[i + 1];
@@ -123,9 +110,11 @@ public class Main {
         }
       }
 
+      // check
       boolean can = true;
       for(int i = 0; i < spy - 1; i++){
         for(int j = 0; j < spx - 1; j++){
+          // check count[i][j] == 0 or 1
           if(counts[i][j] >= 2){
             can = false;
             break;
@@ -133,6 +122,7 @@ public class Main {
         }
       }
 
+      // output
       if(can){
         System.out.println("YES");
       }
@@ -145,9 +135,27 @@ public class Main {
   static class Rect {
     int up, left, down, right;
 
+    // up: minY, left: minX
+    // down: maxY, right: maxX
     Rect(int up, int left, int down, int right){
       this.up = up; this.left = left;
       this.down = down; this.right = right;
     }
   }
+
+  static class Event implements Comparable< Event > {
+    boolean opening;
+    int x;
+
+    Event(boolean opening, int x){
+      this.opening = opening;
+      this.x = x;
+    }
+
+    @Override
+      public int compareTo(Event event){
+        return x - event.x;
+      }
+  }
 }
+
