@@ -18,7 +18,7 @@ public class Main {
         c[i] = sc.nextInt();
       }
 
-      for(int i = 1; i < dp1.length; i++){
+      for(int i = 1; i < 100 * c[5] + 1; i++){
         int min = INF;
         for(int j = 0; j < 6; j++){
           if(i - c[j] >= 0){
