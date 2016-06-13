@@ -14,10 +14,12 @@ public class Main {
     dp1 = new int[10001];
     dp2 = new int[101][10001];
     for(int t = 0; t < test; t++){
+      // input
       for(int i = 0; i < 6; i++){
         c[i] = sc.nextInt();
       }
 
+      // dp1 お釣りなし
       for(int i = 1; i < 100 * c[5] + 1; i++){
         int min = INF;
         for(int j = 0; j < 6; j++){
@@ -34,6 +36,7 @@ public class Main {
         }
       }
 
+      // dp2 お釣りあり
       for(int i = 0; i < dp2.length; i++){
         for(int j = 0; j < 100 * c[5] + 1; j++){
           if(j - i >= 0){
@@ -56,6 +59,7 @@ public class Main {
       }
 
       double ave = sum / 100.0;
+      // output
       System.out.printf("%.2f %d\n", ave, max);
     }
   }
