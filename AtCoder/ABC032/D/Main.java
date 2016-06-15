@@ -133,11 +133,14 @@ public class Main {
   private static void solve3(){
     dp2 = new long[n + 1][200 * 1000 + 1];
 
-    for(int j = 0; j < 200 * 1000 + 1; j++){
-      dp2[1][j] = W + 1;
+    for(int i = 0; i <= n; i++){
+      for(int j = 0; j < 200 * 1000 + 1; j++){
+        dp2[i][j] = INF;
+      }
     }
 
     dp2[1][0] = 0;
+    dp2[1][v[0]] = w[0];
     for(int i = 2; i <= n; i++){
       for(int j = 0; j <= 200 * 1000; j++){
         if(j - v[i - 1] >= 0){
@@ -187,7 +190,7 @@ public class Main {
         }
       }
 
-      @Override
+    @Override
       public String toString(){
         return w + " " + v;
       }
