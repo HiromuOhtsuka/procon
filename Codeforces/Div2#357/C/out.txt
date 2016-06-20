@@ -1,0 +1,13 @@
+main.cpp: In function ‘int main()’:
+main.cpp:27:47: error: ‘to_string’ was not declared in this scope
+       ans.push_back(op + " " + to_string(opNum));
+                                               ^
+main.cpp:35:20: error: ‘class std::priority_queue<int, std::vector<int>, std::greater<int> >’ has no member named ‘peek’
+         s.erase(pq.peek());
+                    ^
+main.cpp:45:50: error: ‘to_string’ was not declared in this scope
+         ans.push_back("insert " + to_string(opNum));
+                                                  ^
+main.cpp:50:50: error: ‘to_string’ was not declared in this scope
+         ans.push_back("getMin " + to_string(opNum));
+                                                  ^

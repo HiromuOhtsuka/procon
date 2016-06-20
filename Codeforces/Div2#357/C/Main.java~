@@ -1,0 +1,47 @@
+import java.util.Scanner;
+import java.util.PriorityQueue;
+
+public class Main {
+  static int n;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    n = sc.nextInt();
+
+    PriorityQueue< Integer > pq = new PriorityQueue< Integer >();
+    for(int i = 0; i < n; i++){
+      int opNum = 0;
+      String op = sc.next();
+      if("insert".equals(op) || "getMin".equals(op)){
+        opNum = sc.nextInt();
+      }
+      if("insert".equals(op)){
+        pq.offer(opNum);
+        System.out.println(op + " " + opNum);
+      }
+      if("removeMin".equals(op)){
+        if(pq.isEmpty()){
+          System.out.println("insert 1");
+          System.out.println("removeMin");
+        }
+	else{
+	  pq.poll();
+          System.out.println("removeMin");
+        }
+      }
+
+      if("getMin".equals(op)){
+        if(!pq.contains(opNum)){
+          pq.offer(opNum);
+          System.out.println("insert " + opNum);
+        }
+        while(pq.peek() == opNum){
+          pq.poll();
+          System.out.println("removeMin");
+        }
+        System.out.println("getMin " + opNum);
+      }
+    }
+  }
+}
