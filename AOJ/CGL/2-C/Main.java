@@ -1,51 +1,48 @@
-class Circle {
-  Point c;
-  double r;
+import java.util.Scanner;
 
-  Circle(Point c, double r){
-    this.c = c; this.r = r;
-  }
+public class Main {
+  static int q;
 
-  static Point[] getCrossPoints(Circle c, Line l){
-    Point pr = l.projection(c.c);
-    Point e = Point.div(Point.sub(l.t, l.s), Point.sub(l.t, l.s).norm());
-    double base = Math.sqrt(c.r * c.r - Point.sub(pr, c.c).norm2());
-    return new Point[]{Point.add(pr, Point.mul(base, e)), Point.sub(pr, Point.mul(base, e))};
-  }
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
 
-  static Point[] getCrossPoints(Circle c1, Circle c2){
-    double d = Point.sub(c1.c, c2.c).norm();
-    double a = Math.acos((c1.r * c1.r + d * d - c2.r * c2.r) / (2 * c1.r * d));
-    double t = Point.arg(Point.sub(c2.c, c1.c));
-    return new Point[]{Point.add(c1.c, Point.polar(c1.r, t + a)), Point.add(c1.c, Point.polar(c1.r, t - a))};
+    q = sc.nextInt();
+    for(int t = 0; t < q; t++){
+      double x0 = sc.nextDouble(), y0 = sc.nextDouble(),
+        x1 = sc.nextDouble(), y1 = sc.nextDouble(),
+        x2 = sc.nextDouble(), y2 = sc.nextDouble(),
+        x3 = sc.nextDouble(), y3 = sc.nextDouble();
+      Segment s1 = new Segment(new Point(x0, y0), new Point(x1, y1));
+      Segment s2 = new Segment(new Point(x2, y2), new Point(x3, y3));
+
+      Point cross = Segment.intersection(s1, s2);
+
+      System.out.printf("%.8f %.8f\n", cross.x, cross.y);
+    }
   }
 }
 
-class Line {
+class Segment {
+  static final double EPS = 1e-10;
   Point s, t;
 
-  Line(Point s, Point t){
+  Segment(Point s, Point t){
     this.s = s; this.t = t;
   }
 
-  /*
-   * find a projection for the line st.
-  */
-  Point projection(Point p){
-    Point st = new Point(t.x - s.x, t.y - s.y),
-      sp = new Point(p.x - s.x, p.y - s.y);
-    double k = Point.dot(st, sp) / st.norm2();
-    return Point.add(s, Point.mul(k, st));
+  boolean intersection(Segment s){
+    return Point.ccw(this.s, this.t, s.s) * 
+      Point.ccw(this.s, this.t, s.t) <= 0 &&
+      Point.ccw(s.s, s.t, this.s) * 
+      Point.ccw(s.s, s.t, this.t) <= 0;
   }
 
-  /*
-   * find a reflection for the line st.
-  */
-  Point reflection(Point p){
-    return Point.add(Point.sub(
-      Point.mul(2.0, 
-        Point.sub(projection(p), s)),
-          new Point(p.x - s.x, p.y - s.y)), s);
+  static Point intersection(Segment s1, Segment s2){
+    Point b = Point.sub(s2.t, s2.s);
+    double d1 = Math.abs(Point.cross(b, Point.sub(s1.s, s2.s)));
+    double d2 = Math.abs(Point.cross(b, Point.sub(s1.t, s2.s)));
+    double t = d1 / (d1 + d2);
+    return Point.add(s1.s, Point.mul(t, Point.sub(s1.t, s1.s)));
   }
 }
 
@@ -115,14 +112,6 @@ class Point implements Comparable< Point > {
 
   double norm2(){
     return x * x + y * y;
-  }
-
-  static double arg(Point p){
-    return Math.atan2(p.y, p.x);
-  }
-
-  static Point polar(double a, double r){
-    return new Point(Math.cos(r) * a, Math.sin(r) * a);
   }
 
   @Override

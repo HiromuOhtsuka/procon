@@ -1,3 +1,27 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main {
+  static int q;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    double cx = sc.nextDouble(), cy = sc.nextDouble(), r = sc.nextDouble();
+    Circle c = new Circle(new Point(cx, cy), r);
+
+    q = sc.nextInt();
+    for(int t = 0; t < q; t++){
+      double x1 = sc.nextDouble(), y1 = sc.nextDouble(),
+             x2 = sc.nextDouble(), y2 = sc.nextDouble();
+      Line l = new Line(new Point(x1, y1), new Point(x2, y2));
+      Point[] cross = Circle.getCrossPoints(c, l);
+      Arrays.sort(cross);
+      System.out.printf("%.8f %.8f %.8f %.8f\n", cross[0].x, cross[0].y, cross[1].x, cross[1].y);
+    }
+  }
+}
+
 class Circle {
   Point c;
   double r;
@@ -12,45 +36,10 @@ class Circle {
     double base = Math.sqrt(c.r * c.r - Point.sub(pr, c.c).norm2());
     return new Point[]{Point.add(pr, Point.mul(base, e)), Point.sub(pr, Point.mul(base, e))};
   }
-
-  static Point[] getCrossPoints(Circle c1, Circle c2){
-    double d = Point.sub(c1.c, c2.c).norm();
-    double a = Math.acos((c1.r * c1.r + d * d - c2.r * c2.r) / (2 * c1.r * d));
-    double t = Point.arg(Point.sub(c2.c, c1.c));
-    return new Point[]{Point.add(c1.c, Point.polar(c1.r, t + a)), Point.add(c1.c, Point.polar(c1.r, t - a))};
-  }
-}
-
-class Line {
-  Point s, t;
-
-  Line(Point s, Point t){
-    this.s = s; this.t = t;
-  }
-
-  /*
-   * find a projection for the line st.
-  */
-  Point projection(Point p){
-    Point st = new Point(t.x - s.x, t.y - s.y),
-      sp = new Point(p.x - s.x, p.y - s.y);
-    double k = Point.dot(st, sp) / st.norm2();
-    return Point.add(s, Point.mul(k, st));
-  }
-
-  /*
-   * find a reflection for the line st.
-  */
-  Point reflection(Point p){
-    return Point.add(Point.sub(
-      Point.mul(2.0, 
-        Point.sub(projection(p), s)),
-          new Point(p.x - s.x, p.y - s.y)), s);
-  }
 }
 
 class Point implements Comparable< Point > { 
-  static final double EPS = 1e-10; 
+  static final double EPS = 1e-12;
   static final int COUNTER_CLOCKWISE = 1;
   static final int CLOCKWISE = -1;
   static final int ONLINE_BACK = 2;
@@ -117,14 +106,6 @@ class Point implements Comparable< Point > {
     return x * x + y * y;
   }
 
-  static double arg(Point p){
-    return Math.atan2(p.y, p.x);
-  }
-
-  static Point polar(double a, double r){
-    return new Point(Math.cos(r) * a, Math.sin(r) * a);
-  }
-
   @Override
     public boolean equals(Object obj){
       if(!(obj instanceof Point)){
@@ -158,4 +139,31 @@ class Point implements Comparable< Point > {
         }
       }
     }
+}
+
+class Line {
+  Point s, t;
+
+  Line(Point s, Point t){
+    this.s = s; this.t = t;
+  }
+
+  /*
+   * find a projection for the line st.
+   */
+  Point projection(Point p){
+    Point base = Point.sub(t, s);
+    double r = Point.dot(Point.sub(p, s), base) / base.norm2();
+    return Point.add(s, Point.mul(r, base));
+  }
+
+  /*
+   * find a reflection for the line st.
+   */
+  Point reflection(Point p){
+    return Point.add(Point.sub(
+          Point.mul(2.0, 
+            Point.sub(projection(p), s)),
+          new Point(p.x - s.x, p.y - s.y)), s);
+  }
 }
