@@ -27,10 +27,12 @@ class Point implements Comparable< Point > {
     return new Point(p.x / d, p.y / d);
   }
 
+  /* 内積 */
   static double dot(Point p1, Point p2){
     return p1.x * p2.x + p1.y * p2.y;
   }
 
+  /* 外積 */
   static double cross(Point p1, Point p2){
     return p1.x * p2.y - p1.y * p2.x;
   }
@@ -41,6 +43,7 @@ class Point implements Comparable< Point > {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  /* 線分p0p1と点p2の位置関係 */
   static int ccw(Point p0, Point p1, Point p2){
     Point a = sub(p1, p0), b = sub(p2, p0);
     if(cross(a, b) > EPS){
@@ -58,18 +61,22 @@ class Point implements Comparable< Point > {
     return ON_SEGMENT;
   }
 
+  /* ノルムの値（二乗値でない） */
   double norm(){
     return Math.sqrt(x * x + y * y);
   }
 
+  /* ノルムの2乗値 */
   double norm2(){
     return x * x + y * y;
   }
 
+  /* 点pがなす角 */
   static double arg(Point p){
     return Math.atan2(p.y, p.x);
   }
 
+  /* 長さrで，角度rの点の座標 */
   static Point polar(double a, double r){
     return new Point(Math.cos(r) * a, Math.sin(r) * a);
   }

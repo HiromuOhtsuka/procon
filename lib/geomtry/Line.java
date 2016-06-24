@@ -6,7 +6,7 @@ class Line {
   }
 
   /*
-   * find a projection for the line st.
+   * 射影
   */
   Point projection(Point p){
     Point st = new Point(t.x - s.x, t.y - s.y),
@@ -16,7 +16,7 @@ class Line {
   }
 
   /*
-   * find a reflection for the line st.
+   * 反射
   */
   Point reflection(Point p){
     return Point.add(Point.sub(

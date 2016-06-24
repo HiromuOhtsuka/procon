@@ -6,12 +6,15 @@ class Segment {
     this.s = s; this.t = t;
   }
 
+  /* 交差判定 */
   boolean intersection(Segment s){
     return Point.ccw(this.s, this.t, s.s) * 
       Point.ccw(this.s, this.t, s.t) <= 0 &&
       Point.ccw(s.s, s.t, this.s) * 
       Point.ccw(s.s, s.t, this.t) <= 0;
   }
+
+  /* 交差点 */
   static Point intersection(Segment s1, Segment s2){
     Point b = Point.sub(s2.t, s2.s);
     double d1 = Math.abs(Point.cross(b, Point.sub(s1.s, s2.s)));

@@ -6,6 +6,7 @@ class Circle {
     this.c = c; this.r = r;
   }
 
+  /* 直線と円との交差点 */
   static Point[] getCrossPoints(Circle c, Line l){
     Point pr = l.projection(c.c);
     Point e = Point.div(Point.sub(l.t, l.s), Point.sub(l.t, l.s).norm());
@@ -13,6 +14,7 @@ class Circle {
     return new Point[]{Point.add(pr, Point.mul(base, e)), Point.sub(pr, Point.mul(base, e))};
   }
 
+  /* 円と円との交差点 */
   static Point[] getCrossPoints(Circle c1, Circle c2){
     double d = Point.sub(c1.c, c2.c).norm();
     double a = Math.acos((c1.r * c1.r + d * d - c2.r * c2.r) / (2 * c1.r * d));
