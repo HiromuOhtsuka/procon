@@ -1,0 +1,5 @@
+sum:3
+perm:0
+r:1
+comb:1
+0
