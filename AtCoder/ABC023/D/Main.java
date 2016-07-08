@@ -1,10 +1,8 @@
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Iterator;
-import java.util.PriorityQueue;
+import java.util.Arrays;
 
 public class Main {
+  static final long INF = Long.MAX_VALUE / 2;
   static int n;
   static int[] h, s;
 
@@ -14,37 +12,48 @@ public class Main {
     n = sc.nextInt();
     h = new int[n]; s = new int[n];
 
-    PriorityQueue< Pair > pq = new PriorityQueue< Pair >();
     for(int i = 0; i < n; i++){
       h[i] = sc.nextInt();  s[i] = sc.nextInt();
-      pq.offer(new Pair(h[i] + s[i], i));
     }
 
+    long low = -1, high = 1000000000000000L;
+    while(high - low > 1){
+      long mid = (high + low) / 2;
+      if(f(mid)){
+        high = mid;
+      }
+      else{
+        low = mid;
+      }
+    }
+
+    System.out.println(high);
+  }
+
+  private static boolean f(long k){
+    Pair[] y = new Pair[n];
+    for(int i = 0; i < n; i++){
+      y[i] = new Pair((double)((double)(k - h[i]) / s[i]), i);
+    }
+    Arrays.sort(y);
     long max = 0;
     for(int i = 0; i < n; i++){
-      Pair p = pq.poll();
-      max = Math.max(p.s - s[p.t], max);
-      PriorityQueue< Pair > tmp = new PriorityQueue< Pair >();
-      for(Pair pp : pq){
-        tmp.offer(new Pair(pp.s + s[pp.t], pp.t));
-      }
-      pq = tmp;
+      max = Math.max(max, (long)i * s[y[i].t] + h[y[i].t]);
     }
-
-    System.out.println(max);
+    return max <= k;
   }
 
   static class Pair implements Comparable< Pair > {
-    long s;
+    double s;
     int t;
 
-    Pair(long s, int t){
+    Pair(double s, int t){
       this.s = s; this.t = t;
     }
 
     @Override
     public int compareTo(Pair p){
-      return new Long(p.s).compareTo(s);
+      return new Double(s).compareTo(p.s);
     }
   }
 }
