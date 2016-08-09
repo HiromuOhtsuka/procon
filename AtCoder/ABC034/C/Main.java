@@ -1,20 +1,47 @@
 import java.util.Scanner;
 
 public class Main {
+  static final long MOD = 1_000_000_007;
+
   public static void main(String[] args){
     Scanner scan = new Scanner(System.in);
 
-    int W = scan.nextInt(), H = scan.nextInt();
-    int[] dp = new int[W];
-    for(int j = 0; j < W; j++){
-      dp[j] = 1;
+    long w = scan.nextInt(), h = scan.nextInt();
+
+    long whp = 1L;
+    for(long i = 1; i <= w + h - 2; i++){
+      whp = (whp * i) % MOD;
     }
-    for(int i = 1; i < H; i++){
-      for(int j = 1; j < W; j++){
-        dp[j] = (dp[j] + dp[j - 1]) % 1000000007;
-      }
+    long wp = 1L;
+    for(long i = 1; i <= w - 1; i++){
+      wp = (wp * i) % MOD;
+    }
+    long hp = 1L;
+    for(long i = 1; i <= h - 1; i++){
+      hp = (hp * i) % MOD;
     }
 
-    System.out.println(dp[W - 1]);
+    long wpr = 1L, base = wp, c = MOD - 2;
+    do {
+      if((c & 1L) != 0L){
+        wpr = (wpr * base) % MOD;
+      }
+      base = (base * base) % MOD;
+      c >>= 1L;
+    } while(c != 0L);
+
+    long hpr = 1L;
+    base = hp; c = MOD - 2;
+    do {
+      if((c & 1L) != 0L){
+        hpr = (hpr * base) % MOD;
+      }
+      base = (base * base) % MOD;
+      c >>= 1L;
+    } while(c != 0L);
+
+    long ans = (((hpr * wpr) % MOD) * whp) % MOD;
+
+    System.out.println(ans);
   }
 }
