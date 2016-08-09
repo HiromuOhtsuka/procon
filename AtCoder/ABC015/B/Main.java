@@ -21,6 +21,11 @@ public class Main {
 
     double ave = sum / (double)(n - count);
 
-    System.out.println(Math.round(ave));
+    if((ave - (int)ave) > 0.0){
+      System.out.println((int)ave + 1);
+    }
+    else{
+      System.out.println((int)ave);
+    }
   }
 }
