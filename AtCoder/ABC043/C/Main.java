@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class Main {
+  static final int INF = Integer.MAX_VALUE / 2;
+  static int n;
+  static int[] a;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    n = sc.nextInt();
+    a = new int[n];
+    for(int i = 0; i < n; i++){
+      a[i] = sc.nextInt();
+    }
+
+    int min = INF;
+    for(int i = -100; i <= 100; i++){
+      int sum = 0;
+      for(int j = 0; j < n; j++){
+        sum += (a[j] - i) * (a[j] - i);
+      }
+      min = Math.min(min, sum);
+    }
+
+    System.out.println(min);
+  }
+}
