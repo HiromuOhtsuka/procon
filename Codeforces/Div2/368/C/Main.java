@@ -8,29 +8,21 @@ public class Main {
 
     n = sc.nextLong();
 
-    long a = 1, b = 2;
-    while(b * b - a * a < n){
-      while(b * b - a * a < n){
-        if(n % (b * b - a * a) == 0){
-          break;
-        }
-        ++b;
-      }
-      if(n % (b * b - a * a) == 0){
-        break;
-      }
-      ++a;
-      b = a + 1;
+    if(n < 3){
+      System.out.println(-1);
+      return;
     }
 
-    if(n % (b * b - a * a) == 0){
-      long i = n / (b * b - a * a);
-      long m = 2 * b * a * i, k = i * (a * a + b * b);
-      System.out.println(m + " " + k);
+    long m, k;
+    if(n % 2 == 0){
+      m = (n / 2) * (n / 2) - 1;
+      k = m + 2;
     }
     else{
-      System.out.println(-1);
+      m = (n * n - 1) / 2;
+      k = m + 1;
     }
-  }
 
+    System.out.println(m + " " + k);
+  }
 }
