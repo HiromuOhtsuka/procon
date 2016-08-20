@@ -19,33 +19,23 @@ public class Main {
       sum += m[i];
     }
 
-    Arrays.sort(m);
-    int c = sum / n, r = sum % n, count = 0, diff = 0;
+    int c = sum / n, r = sum % n;
+    int[] a = new int[n];
     for(int i = 0; i < n - r; i++){
-      int tmp = diff;
-      diff += m[i] - c;
-      if(m[i] < c && diff < 0){
-        count += Math.abs(diff - tmp);
-      }
+      a[i] = c;
     }
-
     for(int i = n - r; i < n; i++){
-      if(m[i] > c + 1){
-        int tmp = diff;
-        diff += m[i] - (c + 1);
-        if(diff > 0){
-          count += Math.abs(tmp - diff);
-        }
-      }
-      else if(m[i] < c + 1){
-        int tmp = diff;
-        diff += m[i] - (c + 1);
-        if(diff < 0){
-          count += Math.abs(tmp - diff);
-        }
-      }
+      a[i] = c + 1;
     }
 
-    System.out.println(count);
+    Arrays.sort(m);
+    int diff = 0;
+    for(int i = 0; i < n; i++){
+      diff += Math.abs(m[i] - a[i]);
+    }
+
+    int ans = diff / 2;
+    System.out.println(ans);
+
   }
 }
