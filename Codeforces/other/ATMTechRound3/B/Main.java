@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Main {
-  static final int INF = Integer.MAX_VALUE / 2;
+  static final long INF = Long.MAX_VALUE / 2;
   static int n, a;
   static Integer[] x;
 
@@ -17,7 +17,10 @@ public class Main {
       x[i] = sc.nextInt();
     }
 
-    Arrays.sort(x);
+    if(n == 1){
+      System.out.println(0);
+      return;
+    }
 
     Map< Integer, Integer > counts = new TreeMap< Integer, Integer >();
     for(int i = 0; i < n; i++){
@@ -30,51 +33,31 @@ public class Main {
       }
     }
 
-    int min1 = INF, mini1 = -1, min2 = INF, mini2 = -1;
-    for(int i = 0; i < n; i++){
-      if(min1 >= Math.abs(x[i] - a)){
-        min2 = min1;
-        min1 = Math.abs(x[i] - a);
-        mini2 = mini1;
-        mini1 = i;
+    Arrays.sort(x);
+
+    long ans = INF;
+    int s = 0, t = 0, count = 0;
+    for(;;){
+      while(t < n && count < n - 1){
+        count += counts.get(x[t]);
+        t += counts.get(x[t]);
       }
-      else if(min2 > Math.abs(x[i] - 1)){
-        min2 = Math.abs(x[i] - 1);
-        mini2 = i;
+      if(count >= n - 1){
+        ans = Math.min(ans, 
+          Math.min(Math.abs(a - x[s]), Math.abs(a - x[t - 1])) + x[t - 1] - x[s]);
       }
-    }
+      else{
+        break;
+      }
 
-    if(n == 1){
-      System.out.println(0);
-      return;
-    }
+      count -= counts.get(x[s]);
+      ++s;
 
-    int s = mini1;
-    long sum1 = min1;
-    for(int i = counts.get(x[mini1]); i < n - 1; i += counts.get(x[s])){
-      sum1 += Math.abs(x[(s + 1) % n] - x[s]);
-      s = (s + 1) % n;
-    }
-    s = mini1;
-    long sum2 = min1;
-    for(int i = counts.get(x[mini2]); i < n - 1; i += counts.get(x[s])){
-      sum2 += Math.abs(x[(n + s - 1) % n] - x[s]);
-      s = (n + s - 1) % n;
-    }
-    s = mini2;
-    long sum3 = min2;
-    for(int i = counts.get(x[mini2]); i < n - 1; i += counts.get(x[s])){
-      sum3 += Math.abs(x[(s + 1) % n] - x[s]);
-      s = (s + 1) % n;
-    }
-    s = mini2;
-    long sum4 = min2;
-    for(int i = counts.get(x[mini2]); i < n - 1; i += counts.get(x[s])){
-      sum4 += Math.abs(x[(n + s - 1) % n] - x[s]);
-      s = (n + s - 1) % n;
-    }
+      if(s == n){
+        break;
+      }
 
-    long ans = Math.min(Math.min(sum1, sum2), Math.min(sum3, sum4));
+    }
 
     System.out.println(ans);
   }
