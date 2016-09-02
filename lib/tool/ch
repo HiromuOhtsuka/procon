@@ -13,10 +13,10 @@ do
     if [ "$result" = "" ] 
     then
       echo "OK on test$i"
+      rm tmp0$i.txt
     else
       echo "Wrong answer on test$i"
       echo $result
     fi
-    rm tmp0$i.txt
   fi
 done
