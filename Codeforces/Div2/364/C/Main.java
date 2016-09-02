@@ -22,21 +22,16 @@ public class Main {
 
     char[] str = s.toCharArray();
     int sum = set.size();
-    int s = 0, t = 0, count = 0, min = INF;
+    int s = 0, t = 0, min = INF;
     Map< Character, Integer > map = new HashMap< Character, Integer >();
     while(s <= t){
-      while(t < n && count != sum){
-        if(map.containsKey(str[t])){
-          int v = map.get(str[t]);
-          map.put(str[t], v + 1);
-        }
-        else{
-          map.put(str[t], 1);
-          ++count;
-        }
+      while(t < n && map.size() != sum){
+        map.merge(str[t], 1, (ov, v) -> {
+          return ov + 1;
+        });
         ++t;
       }
-      if(count == sum){
+      if(map.size() == sum){
         min = Math.min(min, t - s);
       }
       if(map.get(str[s]) >= 2){
@@ -45,7 +40,6 @@ public class Main {
       }
       else{
         map.remove(str[s]);
-        --count;
       }
       ++s;
       if(s == t){
