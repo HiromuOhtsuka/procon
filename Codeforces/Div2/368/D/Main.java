@@ -9,112 +9,66 @@ import java.util.Arrays;
 public class Main {
   static int n, m, q;
 
-  static Query[] queries;
-
   public static void main(String[] args){
     FastScanner sc = new FastScanner();
 
     n = sc.nextInt(); m = sc.nextInt(); q = sc.nextInt();
-    queries = new Query[q];
-    for(int i = 0; i < q; i++){
-      int t = sc.nextInt(), y = sc.nextInt() - 1;
-      if(t == 1 || t == 2){
-        int x = sc.nextInt() - 1;
-        queries[i] = new Query(t, y, x);
-      }
-      else{
-        queries[i] = new Query(t, y);
-      }
-    }
-
-    int[] counts = new int[q + 1];
-    for(int i = 0; i < q; i++){
-      if(queries[i].t == 4){
-        ++counts[queries[i].i + 1];
-      }
-    }
 
     BitSet all = new BitSet(m);
     all.set(0, m);
 
-    Data[] datas = new Data[q + 1];
-    datas[0] = new Data(0, new BitSet[n]);
-    for(int i = 0; i < n; i++){
-      datas[0].cols[i] = new BitSet(m);
+    BitSet[] rows = new BitSet[q + 1];
+    for(int i = 0; i <= q; i++){
+      rows[i] = new BitSet(m);
     }
-
-    BitSet[] bs = new BitSet[n];
-    for(int i = 0; i < n; i++){
-      bs[i] = new BitSet(m);
-    }
-    Data cur = new Data(0, bs);
+    int[][] qi = new int[q + 1][n];
+    int[] ans = new int[q + 1];
 
     StringBuilder sb = new StringBuilder();
     for(int i = 1; i <= q; i++){
-      Query que = queries[i - 1];
+      int t = sc.nextInt(), x = sc.nextInt() - 1;
+      ans[i] = ans[i - 1];
 
-      if(que.t == 1){
-        if(!cur.cols[que.i].get(que.j)){
-          cur.cols[que.i].set(que.j);
-          ++cur.sum;
+      if(t == 1){
+        int y = sc.nextInt() - 1;
+        qi[i] = Arrays.copyOf(qi[i - 1], n);
+        int j = qi[i][x];
+        rows[i] = (BitSet)rows[j].clone();
+        if(!rows[i].get(y)){
+          rows[i].set(y);
+          ++ans[i];
         }
+        qi[i][x] = i;
       }
-      else if(que.t == 2){
-        if(cur.cols[que.i].get(que.j)){
-          cur.cols[que.i].clear(que.j);
-          --cur.sum;
+      else if(t == 2){
+        int y = sc.nextInt() - 1;
+        qi[i] = Arrays.copyOf(qi[i - 1], n);
+        int j = qi[i][x];
+        rows[i] = (BitSet)rows[j].clone();
+        if(rows[i].get(y)){
+          rows[i].clear(y);
+          --ans[i];
         }
+        qi[i][x] = i;
       }
-      else if(que.t == 3){
-        cur.sum -= cur.cols[que.i].cardinality();
-        cur.cols[que.i].xor(all);
-        cur.sum += cur.cols[que.i].cardinality();
+      else if(t == 3){
+        qi[i] = Arrays.copyOf(qi[i - 1], n);
+        int j = qi[i][x];
+        rows[i] = (BitSet)rows[j].clone();
+        ans[i] -= rows[i].cardinality();
+        rows[i].xor(all);
+        ans[i] += rows[i].cardinality();
+        qi[i][x] = i;
       }
       else{
-        bs = new BitSet[n];
-        for(int j = 0; j < n; j++){
-          bs[j] = (BitSet)datas[que.i + 1].cols[j].clone();
-        }
-        cur = new Data(datas[que.i + 1].sum, bs);
+        ans[i] = ans[x + 1];
+        qi[i] = Arrays.copyOf(qi[x + 1], n);
       }
 
-      if(counts[i] >= 1){
-        bs = new BitSet[n];
-        for(int j = 0; j < n; j++){
-          bs[j] = (BitSet)cur.cols[j].clone();
-        }
-        datas[i] = new Data(cur.sum, bs);
-      }
-
-      sb.append(cur.sum + "\n");
+      sb.append(ans[i] + "\n");
     }
 
     System.out.print(sb);
-  }
-
-  static class Query {
-    int t;
-    int i, j;
-
-    Query(int t, int i, int j){
-      this.t = t;
-      this.i = i; this.j = j;
-    }
-
-    Query(int t, int i){
-      this.t = t;
-      this.i = i;
-    }
-  }
-
-  static class Data {
-    int sum;
-    BitSet[] cols;
-
-    Data(int sum, BitSet[] cols){
-      this.sum = sum;
-      this.cols = cols;
-    }
   }
 }
 
