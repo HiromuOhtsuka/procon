@@ -22,15 +22,17 @@ public class Main {
         int x = sc.nextInt() - 1;
         queries[i] = new Query(t, y, x);
       }
-      else if(t == 4){
-        queries[i] = new Query(t, y + 1);
-      }
       else{
         queries[i] = new Query(t, y);
       }
     }
 
-    StringBuilder sb = new StringBuilder();
+    int[] counts = new int[q + 1];
+    for(int i = 0; i < q; i++){
+      if(queries[i].t == 4){
+        ++counts[queries[i].i + 1];
+      }
+    }
 
     BitSet all = new BitSet(m);
     all.set(0, m);
@@ -41,11 +43,15 @@ public class Main {
       datas[0].cols[i] = new BitSet(m);
     }
 
+    BitSet[] bs = new BitSet[n];
+    for(int i = 0; i < n; i++){
+      bs[i] = new BitSet(m);
+    }
+    Data cur = new Data(0, bs);
+
+    StringBuilder sb = new StringBuilder();
     for(int i = 1; i <= q; i++){
       Query que = queries[i - 1];
-
-      Data cur = new Data(
-        datas[i - 1].sum, Arrays.copyOf(datas[i - 1].cols, datas[i - 1].cols.length));
 
       if(que.t == 1){
         if(!cur.cols[que.i].get(que.j)){
@@ -65,13 +71,22 @@ public class Main {
         cur.sum += cur.cols[que.i].cardinality();
       }
       else{
-        cur = new Data(datas[que.i].sum, 
-          Arrays.copyOf(datas[que.i].cols, datas[que.i].cols.length));
+        bs = new BitSet[n];
+        for(int j = 0; j < n; j++){
+          bs[j] = (BitSet)datas[que.i + 1].cols[j].clone();
+        }
+        cur = new Data(datas[que.i + 1].sum, bs);
+      }
+
+      if(counts[i] >= 1){
+        bs = new BitSet[n];
+        for(int j = 0; j < n; j++){
+          bs[j] = (BitSet)cur.cols[j].clone();
+        }
+        datas[i] = new Data(cur.sum, bs);
       }
 
       sb.append(cur.sum + "\n");
-
-      datas[i] = new Data(cur.sum, Arrays.copyOf(cur.cols, cur.cols.length));
     }
 
     System.out.print(sb);
