@@ -7,16 +7,20 @@ javac $SRC
 for i in `seq 0 8`
 do
   if [ -e in0$i.txt ] && [ -e out0$i.txt ]
-    then
+  then
     java -ea $PRG < in0$i.txt > tmp0$i.txt
     result=`diff out0$i.txt tmp0$i.txt`
     if [ "$result" = "" ] 
     then
-      echo "OK on test$i"
+      echo "OK on test$i."
       rm tmp0$i.txt
     else
-      echo "Wrong answer on test$i"
+      echo "Wrong answer on test$i."
       echo $result
+      echo "Output:"
+      cat tmp0$i.txt
+      echo "Answer:"
+      cat out0$i.txt
     fi
   fi
 done
