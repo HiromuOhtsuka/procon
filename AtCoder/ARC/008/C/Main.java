@@ -1,8 +1,9 @@
 import java.util.Scanner;
 import java.util.PriorityQueue;
+import java.util.Arrays;
 
 public class Main {
-  static final double INF = Double.MAX_VALUE / 2;
+  static final double INF = Double.MAX_VALUE;
   static int n;
   static double[] x, y, t, r;
   static double[][] G;
@@ -25,7 +26,7 @@ public class Main {
       for(int j = 0; j < n; j++){
         double d = Math.sqrt(
           (x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
-        G[i][j] = d / Math.min(t[i], r[j]) + 1;
+        G[i][j] = d / Math.min(t[i], r[j]);
       }
     }
 
@@ -36,28 +37,24 @@ public class Main {
 
     PriorityQueue< Pair > pq = new PriorityQueue< Pair >();
     pq.offer(new Pair(0, 0));
+    dist[0] = 0;
     while(!pq.isEmpty()){
       Pair p = pq.poll();
-      if(dist[p.v] > p.d){
-        dist[p.v] = p.d;
-      }
-      else{
-        continue;
-      }
       for(int w = 0; w < n; w++){
-        if(w == p.v){
-          continue;
+        if(p.d + G[p.v][w] < dist[w]){
+          dist[w] = p.d + G[p.v][w];
+          pq.offer(new Pair(w, dist[w]));
         }
-        pq.offer(new Pair(w, p.d + G[p.v][w]));
       }
     }
 
+    Arrays.sort(dist);
     double ans = 0;
-    for(int i = 0; i < n; i++){
-      ans += dist[i];
+    for(int i = n - 1; i >= 1; i--){
+      ans = Math.max(ans, dist[i] + (double)(n - i - 1));
     }
 
-    System.out.println(ans);
+    System.out.printf("%.12f\n", ans);
   }
 
   static class Pair implements Comparable< Pair > {
@@ -70,7 +67,7 @@ public class Main {
 
     @Override
     public int compareTo(Pair p){
-      return new Double(d).compareTo(p.d);
+      return Double.compare(d, p.d);
     }
   }
 }
