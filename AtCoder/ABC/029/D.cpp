@@ -4,7 +4,7 @@ using namespace std;
 
 static int N, keta, ans;
 static int t[MAX_KETA];
-static void search(int i, int s){
+static void search(int i){
   if(i == keta){
     int n = 0, count = 0;
     for(int j = 0; j < keta; j++){
@@ -22,7 +22,7 @@ static void search(int i, int s){
   }
 
   for(t[i] = 0; t[i] < 10; t[i]++){
-    search(i + 1, s + t[i] * pow(10, i));
+    search(i + 1);
   }
 
 }
