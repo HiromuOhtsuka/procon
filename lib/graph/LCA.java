@@ -1,51 +1,6 @@
-import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Stack;
-
-public class Main {
-  static int n, q;
-  static List< List< Integer > > T;
-  static int[] a, b;
-
-  public static void main(String[] args){
-    Scanner sc = new Scanner(System.in);
-
-    n = sc.nextInt();
-    T = new ArrayList< List< Integer > >(n);
-    for(int i = 0; i < n; i++){
-      T.add(new ArrayList< Integer >());
-    }
-    for(int i = 0; i < n - 1; i++){
-      int x = sc.nextInt() - 1, y = sc.nextInt() - 1;
-      T.get(x).add(y);  T.get(y).add(x);
-    }
-    q = sc.nextInt();
-    a = new int[q]; b = new int[q];
-    for(int i = 0; i < q; i++){
-      a[i] = sc.nextInt() - 1; b[i] = sc.nextInt() - 1;
-    }
-
-    LCA lca = new LCA(n, T);
-    lca.optimize();
-
-    int[] ans = new int[q];
-    for(int i = 0; i < q; i++){
-      int ancester = lca.lca(a[i], b[i]);
-      ans[i] = lca.rank(a[i]) - lca.rank(ancester) +
-        lca.rank(b[i]) - lca.rank(ancester) + 1;
-    }
-
-    StringBuilder sb = new StringBuilder();
-    for(int i = 0; i < q; i++){
-      sb.append(ans[i] + System.lineSeparator());
-    }
-
-    System.out.print(sb);
-  }
-}
 
 class LCA {
   int n;
