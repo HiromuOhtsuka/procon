@@ -3,16 +3,11 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-
 public class Main {
   static final long INF = Long.MAX_VALUE / 2;
-  static int n, m, k;
-  static long x, s;
+  static int m, k;
+  static long n, x, s;
   static long[] a, b, c, d;
-  static Pair[] e;
 
   public static void main(String[] args){
     FastScanner sc = new FastScanner();
@@ -36,106 +31,46 @@ public class Main {
       d[i] = sc.nextInt();
     }
 
-    Pair[] tmp = new Pair[k];
-    for(int i = 0; i < k; i++){
-      tmp[i] = new Pair(d[i], c[i]);
-    }
+    long ans = n * x;
 
-    Arrays.sort(tmp);
-    List< Pair > list = new ArrayList< Pair >(k);
-    long c0 = 0;
-    for(int i = 0; i < k; i++){
-      if(c0 < tmp[i].t){
-        list.add(tmp[i]);
-        c0 = tmp[i].t;
-      }
-    }
-    e = list.toArray(new Pair[list.size()]);
-
-    long low = -1, high = INF;
-    while(high - low > 1){
-      long mid = (low + high) / 2L;
-      if(greedy(mid)){
-        high = mid;
-      }
-      else{
-        low = mid;
-      }
-    }
-
-    System.out.println(high);
-  }
-
-  private static boolean greedy(long y){
     // 1 only
-    long potion = 0, mana = 0, time = x;
+    long potion = 0;
     for(int i = 0; i < m; i++){
-      if(mana + b[i] <= s){
-        mana += b[i];
-        time = a[i];
-        break;
+      if(b[i] <= s){
+        ans = Math.min(ans, a[i] * n);
       }
-    }
-    long r = n - potion;
-    if(r * time <= y){
-      return true;
     }
 
     // 2 only
-    potion = 0; mana = 0; time = x;
+    potion = 0;
     for(int i = k - 1; i >= 0; i--){
-      if(mana + d[i] <= s){
-        mana += d[i];
-        potion += c[i];
-        break;
+      if(d[i] <= s){
+        ans = Math.min(ans, x * (n - c[i]));
       }
-    }
-    r = n - potion;
-    if(r * time <= y){
-      return true;
     }
 
     // 1 and 2
     for(int i = 0; i < m; i++){
-      int j = upperBound(-1, e.length, s - b[i]);
-      if(0 <= j && j < e.length && b[i] + e[j].s <= s){
-        r = n - e[j].t;
-        if(r * a[i] <= y){
-          return true;
+      if(b[i] > s){
+        continue;
+      }
+      long r = s - b[i];
+      int low = -1, high = k;
+      while(high - low > 1){
+        int mid = (high + low) / 2;
+        if(d[mid] <= r){
+          low = mid;
+        }
+        else{
+          high = mid;
         }
       }
-    }
-
-    return false;
-  }
-
-  private static int upperBound(int low, int high, long tar){
-    while(high - low > 1){
-      int mid = (high + low) / 2;
-      if(e[mid].s <= tar){
-        low = mid;
-      }
-      else{
-        high = mid;
+      if(0 <= low && low < k){
+        ans = Math.min(ans, a[i] * (n - c[low]));
       }
     }
-    return low;
-  }
 
-  static class Pair implements Comparable< Pair > {
-    long s, t;
-
-    Pair(long s, long t){
-      this.s = s; this.t = t;
-    }
-
-    @Override
-      public int compareTo(Pair p){
-        if(s == p.s){
-          return Long.compare(t, p.t);
-        }
-        return Long.compare(s, p.s);
-      }
+    System.out.println(ans);
   }
 }
 
