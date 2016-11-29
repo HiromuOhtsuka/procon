@@ -56,20 +56,11 @@ public class Main {
     int p = 0, time = 0;
     for(int i = 0; i < k + 1; i++){
       int d = g[i] - p;
-      int low = -1, high = d + 1;
-      while(high - low > 1){
-        int mid = (high + low) / 2;
-        if(2 * mid + (d - mid) <= x){
-          low = mid;
-        }
-        else{
-          high = mid;
-        }
-      }
-      if(low == -1){
+      if(x - d < 0){
         return false;
       }
-      time += low + 2 * (d - low);
+      int y = Math.min(x - d, d);
+      time += y + 2 * (d - y);
       p = g[i];
     }
 
