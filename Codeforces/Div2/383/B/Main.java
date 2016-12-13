@@ -39,11 +39,13 @@ public class Main {
     for(int i = 0; i < n; i++){
       if(map.containsKey(b[i])){
         count += map.get(b[i]);
-        if(b[i] == a[i]){
-          --count;
-        }
       }
     }
+
+    if(x == 0){
+      count -= n;
+    }
+
     count /= 2L;
 
     System.out.println(count);
