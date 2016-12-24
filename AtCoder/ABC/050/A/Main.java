@@ -1,0 +1,24 @@
+import java.util.Scanner;
+
+public class Main {
+  static int a, b;
+  static char op;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    a = sc.nextInt();
+    op = sc.next().charAt(0);
+    b = sc.nextInt();
+
+    int ans = 0;
+    if(op == '+'){
+      ans = a + b;
+    }
+    else{
+      ans = a - b;
+    }
+
+    System.out.println(ans);
+  }
+}
