@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class Main{
+  static int n;
+  static char[] s;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    n = sc.nextInt();
+    s = sc.next().toCharArray();
+
+    int x = 0;
+    int max = 0;
+    for(int i = 0; i < s.length; i++){
+      if(s[i] == 'I'){
+        ++x;
+      }
+      else{
+        --x;
+      }
+      max = Math.max(max, x);
+    }
+
+    System.out.println(max);
+  }
+}
