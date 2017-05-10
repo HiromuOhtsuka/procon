@@ -1,0 +1,21 @@
+import java.util.Scanner;
+import java.math.BigInteger;
+
+public class Main{
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    BigInteger a = new BigInteger(sc.next());
+    BigInteger b = new BigInteger(sc.next());
+
+    if(a.equals(b)){
+      System.out.println("EQUAL");
+    }
+    else if(a.compareTo(b) > 0){
+      System.out.println("GREATER");
+    }
+    else{
+      System.out.println("LESS");
+    }
+  }
+}
