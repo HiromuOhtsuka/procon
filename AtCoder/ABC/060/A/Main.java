@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class Main{
+  static String a, b, c;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    a = sc.next();
+    b = sc.next();
+    c = sc.next();
+
+    if(a.charAt(a.length() - 1) == b.charAt(0)
+      && b.charAt(b.length() - 1) == c.charAt(0)){
+      System.out.println("YES");
+    }
+    else{
+      System.out.println("NO");
+    }
+  }
+}
