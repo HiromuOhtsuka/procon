@@ -1,0 +1,38 @@
+import java.util.Scanner;
+
+public class Main{
+  static final long MAX = 10_000_000_000_001_000L;
+  static long k;
+
+  static final boolean DEBUG = false;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    k = sc.nextLong();
+
+    int n = 50;
+    long[] a = new long[n];
+    for(int i = 0; i < n; i++){
+      a[i] = i + k / n;
+    }
+    for(int i = 0; i < k % n; i++){
+      a[i] += n;
+      for(int j = 0; j < n; j++){
+        if(i != j){
+          a[j]--;
+        }
+      }
+    }
+
+    System.out.println(n);
+    for(int i = 0; i < a.length; i++){
+      System.out.print(a[i] + " ");
+    }
+    System.out.println();
+
+    if(DEBUG){
+      System.out.println("n = " + a.length);
+    }
+  }
+}

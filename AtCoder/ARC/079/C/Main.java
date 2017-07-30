@@ -1,0 +1,48 @@
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+
+public class Main{
+  static int n, m;
+  static int[] a, b;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    n = sc.nextInt();
+    m = sc.nextInt();
+    a = new int[m];
+    b = new int[m];
+    for(int i = 0; i < m; i++){
+      a[i] = sc.nextInt() - 1;
+      b[i] = sc.nextInt() - 1;
+    }
+
+    List< Set< Integer > > graph = new ArrayList< >(n);
+    for(int i = 0; i < n; i++){
+      graph.add(new HashSet< >());
+    }
+
+    for(int i = 0; i < m; i++){
+      graph.get(a[i]).add(b[i]);
+      graph.get(b[i]).add(a[i]);
+    }
+
+    boolean possible = false;
+    for(int v : graph.get(n - 1)){
+      if(graph.get(v).contains(0)){
+        possible = true;
+        break;
+      }
+    }
+
+    if(possible){
+      System.out.println("POSSIBLE");
+    }
+    else{
+      System.out.println("IMPOSSIBLE");
+    }
+  }
+}
