@@ -1,0 +1,52 @@
+import java.util.Scanner;
+
+public class Main{
+  static int n;
+  static char[] s1, s2;
+  static final long MOD = 1000000007;
+
+  static final boolean DEBUG = false;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    n = sc.nextInt();
+    s1 = sc.next().toCharArray();
+    s2 = sc.next().toCharArray();
+
+    long[] dp = new long[n + 1];
+    int s = -1;
+    if(s1[0] == s2[0]){
+      s = 2;
+      dp[1] = 3;
+    }
+    else{
+      s = 3;
+      dp[2] = 6;
+    }
+
+    for(int i = s; i <= n; i++){
+      if(s1[i - 1] == s2[i - 1]){
+        if(s1[i - 2] == s2[i - 2]){
+          dp[i] = (2L * dp[i - 1]) % MOD;
+        }
+        else{
+          dp[i] = dp[i - 1];
+        }
+      }
+      else if(s1[i - 1] == s1[i - 2]){
+        if(i - 3 >= 0 && s1[i - 3] == s2[i - 3]){
+          dp[i] = (2L * dp[i - 2]) % MOD;
+        }
+        else{
+          dp[i] = (3L * dp[i - 2]) % MOD;
+        }
+      }
+      if(DEBUG){
+        System.out.println(i + " " + dp[i]);
+      }
+    }
+
+    System.out.println(dp[n]);
+  }
+}
