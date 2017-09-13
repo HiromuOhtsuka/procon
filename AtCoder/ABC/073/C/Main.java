@@ -1,0 +1,30 @@
+import java.util.Scanner;
+import java.util.Set;
+import java.util.HashSet;
+
+public class Main{
+  static int n;
+  static int[] a;
+
+  public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+
+    n = sc.nextInt();
+    a = new int[n];
+    for(int i = 0; i < n; i++){
+      a[i] = sc.nextInt();
+    }
+
+    Set< Integer > set = new HashSet< >();
+    for(int i = 0; i < n; i++){
+      if(set.contains(a[i])){
+        set.remove(a[i]);
+      }
+      else{
+        set.add(a[i]);
+      }
+    }
+
+    System.out.println(set.size());
+  }
+}
