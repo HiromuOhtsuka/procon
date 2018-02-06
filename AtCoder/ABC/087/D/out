@@ -1,0 +1,47 @@
+In file included from main.cpp:1:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/iostream:38:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/ios:216:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__locale:15:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/string:439:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/algorithm:627:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/utility:157:
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__tuple:199:5: error: static_assert failed "tuple_element index out of range"
+    static_assert(_Ip != 0, "tuple_element index out of range");
+    ^             ~~~~~~~~
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__tuple:213:22: note: in instantiation of template class 'std::__1::tuple_element<0, std::__1::__tuple_types<> >' requested here
+    typedef typename tuple_element<_Ip-1, __tuple_types<_Tp...> >::type type;
+                     ^
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__tuple:213:22: note: in instantiation of template class 'std::__1::tuple_element<1, std::__1::__tuple_types<int> >' requested here
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__tuple:213:22: note: in instantiation of template class 'std::__1::tuple_element<2, std::__1::__tuple_types<int, int> >' requested here
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/tuple:154:22: note: in instantiation of template class 'std::__1::tuple_element<3, std::__1::__tuple_types<int, int, int> >' requested here
+    typedef typename tuple_element<_Ip, __tuple_types<_Tp...> >::type type;
+                     ^
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/tuple:505:18: note: in instantiation of template class 'std::__1::tuple_element<3, std::__1::tuple<int, int, int> >' requested here
+        typename tuple_element<_Jp, tuple<_Up...> >::type& get(tuple<_Up...>&) _NOEXCEPT;
+                 ^
+main.cpp:40:13: note: while substituting deduced template arguments into function template 'get' [with _Jp = 3, _Up = <int, int, int>]
+    int d = get< 3 >(tp[i]);
+            ^
+In file included from main.cpp:1:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/iostream:38:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/ios:216:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/__locale:15:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/string:439:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/algorithm:628:
+In file included from /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/memory:609:
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/tuple:756:12: error: no viable conversion from 'const base' (aka 'const __tuple_impl<__tuple_indices<0UL, 1UL, 2UL>, int, int, int>') to 'const __tuple_leaf<3UL, type>' (aka 'const __tuple_leaf<3UL, int>')
+    return static_cast<const __tuple_leaf<_Ip, type>&>(__t.base_).get();
+           ^                                           ~~~~~~~~~
+main.cpp:40:13: note: in instantiation of function template specialization 'std::__1::get<3, int, int, int>' requested here
+    int d = get< 3 >(tp[i]);
+            ^
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/tuple:275:5: note: candidate constructor not viable: no known conversion from 'const base' (aka 'const __tuple_impl<__tuple_indices<0UL, 1UL, 2UL>, int, int, int>') to 'const std::__1::__tuple_leaf<3, int, false> &' for 1st argument
+    __tuple_leaf(const __tuple_leaf& __t) = default;
+    ^
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/tuple:276:5: note: candidate constructor not viable: no known conversion from 'const base' (aka 'const __tuple_impl<__tuple_indices<0UL, 1UL, 2UL>, int, int, int>') to 'std::__1::__tuple_leaf<3, int, false> &&' for 1st argument
+    __tuple_leaf(__tuple_leaf&& __t) = default;
+    ^
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/tuple:212:19: note: candidate template ignored: disabled by 'enable_if' [with _Tp = const std::__1::__tuple_impl<std::__1::__tuple_indices<0, 1, 2>, int, int, int> &]
+                  __lazy_and<
+                  ^
+2 errors generated.
