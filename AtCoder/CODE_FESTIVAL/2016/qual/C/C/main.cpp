@@ -40,16 +40,6 @@ int main(){
   for(int i = 0; i < n; i++) cin >> t[i];
   for(int i = 0; i < n; i++) cin >> a[i];
 
-  int mat = 0, maa = 0;
-  for(int i = 0; i < n; i++){
-    mat = max(mat, t[i]);
-    maa = max(maa, a[i]);
-  }
-  if(mat != maa){
-    cout << 0 << endl;
-    return 0;
-  }
-
   bool ng = false;
   int c[n];
   c[0] = 1;
