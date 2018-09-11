@@ -32,23 +32,37 @@ int lcm(int x, int y){
   return x / gcd(x, y) * y;
 }
 
+int digit(int x){
+  int c = 0;
+  while(x != 0){
+    x /= 10;
+    ++c;
+  }
+  return c;
+}
+
+int pow(int a, int b){
+  int result = 1;
+  for(int i = 0; i < b; i++){
+    result *= a;
+  }
+  return result;
+}
+
 int main(){
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-  int n, k;
-  cin >> n >> k;
-  int a[n];
-  for(int i = 0; i < n; i++) cin >> a[i];
+  int x, k;
+  cin >> x >> k;
 
-  sort(a, a + n);
-  ll sum = 0;
-  for(int i = 0; i < k; i++){
-    sum += a[i];
+  int ans = pow(10, k);
+  if(ans > x){
+    cout << ans << endl;
+    return 0;
   }
-  sum += (ll)k * (k - 1) / 2;
-
-  cout << sum << endl;
+  ans += (x / ans) * pow(10, k);
+  cout << ans << endl;
 
   return 0;
 }
