@@ -36,38 +36,29 @@ int main(){
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-  int n, q;
-  cin >> n >> q;
-  vector< ll > x(n);
-  for(int i = 0; i < n; i++) cin >> x[i];
-  vector< ll > c(q), d(q);
-  for(int i = 0; i < q; i++) cin >> c[i] >> d[i];
+  int a, b, n;
+  cin >> a >> b >> n;
+  string x;
+  cin >> x;
 
-  vector< ll > sum(n + 1);
-  sum[0] = 0;
-  for(int i = 1; i <= n; i++){
-    sum[i] = sum[i - 1] + x[i - 1];
+  for(int i = 0; i < n; i++){
+    switch(x[i]){
+      case 'S':
+        if(a > 0) --a;
+        break;
+      case 'C':
+        if(b > 0) --b;
+        break;
+      case 'E':
+        if(a == 0 && b == 0) break;
+        else if(a >= b) --a;
+        else --b;
+        break;
+    }
   }
 
-  vector< ll > ans(q);
-  for(int l = 0; l < q; l++){
-    int i = distance(x.begin(), 
-        upper_bound(x.begin(), x.end(), c[l] - d[l]));
-    int j = distance(x.begin(), 
-        upper_bound(x.begin(), x.end(), c[l]));
-    int k = distance(x.begin(), 
-        upper_bound(x.begin(), x.end(), c[l] + d[l]));
-    ans[l] = (i + (n - k)) * d[l] + 
-      (c[l] * (j - i) - (sum[j] - sum[i])) + 
-      ((sum[k] - sum[j]) - (c[l] * (k - j)));
-  }
-
-  string buf;
-  for(ll a: ans){
-    buf += to_string(a) + "\n";
-  }
-
-  cout << buf;
+  cout << a << endl;
+  cout << b << endl;
 
   return 0;
 }
